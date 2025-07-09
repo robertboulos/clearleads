@@ -1,27 +1,52 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Shield, CheckCircle, Zap, BarChart3, Users, Star } from 'lucide-react';
+import { CheckCircle, Star, BarChart3, ArrowRight } from 'lucide-react';
 import { Button } from '../components/ui/Button';
+import { LeadInfoCard } from '../components/landing/LeadInfoCard';
 import { PLANS } from '../utils/constants';
 
 export const Landing: React.FC = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="bg-white shadow-sm">
+      <header className="bg-white shadow-sm border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <Shield className="w-8 h-8 text-blue-600" />
-              <span className="ml-2 text-xl font-bold text-gray-900">ClearLeads</span>
+            <div className="flex items-center space-x-8">
+              <div className="flex items-center">
+                <span className="text-2xl font-bold text-gray-900">
+                  CLEAR<span className="font-normal text-gray-500">LEADS</span>
+                </span>
+              </div>
+              
+              <nav className="hidden md:flex items-center space-x-8">
+                <Link to="/benefits" className="text-gray-700 hover:text-gray-900 font-medium">
+                  Benefits
+                </Link>
+                <Link to="/features" className="text-gray-700 hover:text-gray-900 font-medium">
+                  Features
+                </Link>
+                <Link to="/use-cases" className="text-gray-700 hover:text-gray-900 font-medium">
+                  Use Cases
+                </Link>
+                <Link to="/pricing" className="text-gray-700 hover:text-gray-900 font-medium">
+                  Pricing
+                </Link>
+                <div className="flex items-center">
+                  <img src="https://zapier.com/favicon.ico" alt="Zapier" className="w-6 h-6 mr-2" />
+                  <span className="text-orange-600 font-medium">zapier</span>
+                </div>
+              </nav>
             </div>
             
             <div className="flex items-center space-x-4">
-              <Link to="/login" className="text-gray-700 hover:text-gray-900">
-                Sign in
+              <Link to="/login" className="text-gray-700 hover:text-gray-900 font-medium">
+                Log in
               </Link>
               <Link to="/register">
-                <Button>Get Started</Button>
+                <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium">
+                  Sign up
+                </Button>
               </Link>
             </div>
           </div>
@@ -29,32 +54,68 @@ export const Landing: React.FC = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              Validate Leads with
-              <span className="text-blue-200"> Confidence</span>
-            </h1>
-            <p className="text-xl md:text-2xl mb-8 text-blue-100">
-              Clean your lead database with our powerful email and phone validation platform
-            </p>
-            <div className="flex justify-center space-x-4">
-              <Link to="/register">
-                <Button size="lg" variant="secondary">
-                  Start Free Trial
-                </Button>
-              </Link>
-              <Button size="lg" variant="outline">
-                Watch Demo
-              </Button>
+      <section className="bg-gradient-to-br from-gray-50 to-blue-50 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left Content */}
+            <div className="space-y-8">
+              <div className="space-y-6">
+                <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
+                  Simple, fast, secure lead validation service
+                </h1>
+                
+                <p className="text-xl text-gray-600 leading-relaxed">
+                  Validate emails and phone numbers in one simple step. 
+                  Intelligent lead qualification and valuation so you invest 
+                  your time and budget where it truly counts.
+                </p>
+              </div>
+
+              {/* Features List */}
+              <div className="flex flex-wrap gap-6">
+                <div className="flex items-center space-x-2">
+                  <CheckCircle className="w-5 h-5 text-purple-600" />
+                  <span className="text-gray-700 font-medium">Smart Validation</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Star className="w-5 h-5 text-green-600" />
+                  <span className="text-gray-700 font-medium">Lead Qualification</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <BarChart3 className="w-5 h-5 text-red-600" />
+                  <span className="text-gray-700 font-medium">Value Assessment</span>
+                </div>
+              </div>
+
+              {/* CTA Button */}
+              <div className="space-y-4">
+                <Link to="/register">
+                  <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-semibold text-lg inline-flex items-center">
+                    Get started for free
+                    <ArrowRight className="w-5 h-5 ml-2" />
+                  </Button>
+                </Link>
+                
+                <p className="text-gray-500 text-sm">
+                  50 free validations per month
+                </p>
+              </div>
+            </div>
+
+            {/* Right Content - Lead Info Card */}
+            <div className="flex justify-center lg:justify-end">
+              <LeadInfoCard />
             </div>
           </div>
         </div>
+
+        {/* Background decoration */}
+        <div className="absolute top-0 right-0 -mt-20 -mr-20 w-80 h-80 bg-blue-100 rounded-full opacity-20"></div>
+        <div className="absolute bottom-0 left-0 -mb-20 -ml-20 w-60 h-60 bg-purple-100 rounded-full opacity-20"></div>
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
@@ -78,7 +139,7 @@ export const Landing: React.FC = () => {
 
             <div className="text-center">
               <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Zap className="w-8 h-8 text-green-600" />
+                <Star className="w-8 h-8 text-green-600" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Batch Processing</h3>
               <p className="text-gray-600">
@@ -100,7 +161,7 @@ export const Landing: React.FC = () => {
       </section>
 
       {/* Pricing Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
@@ -166,7 +227,7 @@ export const Landing: React.FC = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
@@ -201,7 +262,7 @@ export const Landing: React.FC = () => {
                 rating: 5
               }
             ].map((testimonial, index) => (
-              <div key={index} className="bg-white p-6 rounded-lg shadow-md">
+              <div key={index} className="bg-gray-50 p-6 rounded-lg">
                 <div className="flex items-center mb-4">
                   {[...Array(testimonial.rating)].map((_, i) => (
                     <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
@@ -226,8 +287,9 @@ export const Landing: React.FC = () => {
           <div className="grid md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center mb-4">
-                <Shield className="w-8 h-8 text-blue-400" />
-                <span className="ml-2 text-xl font-bold">ClearLeads</span>
+                <span className="text-xl font-bold">
+                  CLEAR<span className="font-normal text-gray-400">LEADS</span>
+                </span>
               </div>
               <p className="text-gray-400">
                 The most reliable lead validation platform for modern marketing teams.
