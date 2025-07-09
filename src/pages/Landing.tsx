@@ -33,7 +33,7 @@ export const Landing: React.FC = () => {
                   Pricing
                 </Link>
                 <img 
-                  src="/Zapier_logo.svg.png" 
+                  src="https://cdn.weweb.io/designs/280b80a4-4d8f-427d-9f19-e68200e08dfd/sections/Untitled_design_-_2025-02-19T120300.582.png?_wwcv=1739984607225" 
                   alt="Zapier" 
                   className="h-6"
                 />
