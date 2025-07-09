@@ -21,8 +21,8 @@ export const Login: React.FC = () => {
 
   return (
     <AuthLayout 
-      title="Sign in to your account"
-      subtitle="Welcome back! Please enter your details."
+      title="Log in"
+      subtitle="The fastest, simplest, and most secure email validation service."
     >
       <LoginForm onSubmit={handleSubmit} isLoading={isLoading} />
     </AuthLayout>

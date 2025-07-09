@@ -13,26 +13,25 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
   subtitle
 }) => {
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
-          <div className="flex items-center">
-            <Shield className="w-10 h-10 text-blue-600" />
-            <span className="ml-2 text-2xl font-bold text-gray-900">ClearLeads</span>
+          <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mb-6">
+            <Shield className="w-8 h-8 text-white" />
           </div>
         </div>
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        <h2 className="text-center text-3xl font-bold text-gray-900 mb-2">
           {title}
         </h2>
         {subtitle && (
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="text-center text-gray-600 mb-8">
             {subtitle}
           </p>
         )}
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+        <div className="bg-white py-8 px-8 shadow-lg rounded-2xl">
           {children}
         </div>
       </div>

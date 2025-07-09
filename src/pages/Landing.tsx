@@ -33,7 +33,7 @@ export const Landing: React.FC = () => {
                   Pricing
                 </Link>
                 <div className="flex items-center">
-                  <img src="https://zapier.com/favicon.ico" alt="Zapier" className="w-6 h-6 mr-2" />
+                  <img src="https://cdn.zapier.com/zapier/images/logo-1.png" alt="Zapier" className="w-6 h-6 mr-2" />
                   <span className="text-orange-600 font-medium">zapier</span>
                 </div>
               </nav>

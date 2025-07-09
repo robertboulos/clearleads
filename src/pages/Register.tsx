@@ -21,8 +21,8 @@ export const Register: React.FC = () => {
 
   return (
     <AuthLayout 
-      title="Create your account"
-      subtitle="Start validating leads with confidence today."
+      title="Sign Up"
+      subtitle="The fastest, simplest, and most secure email validation service."
     >
       <RegisterForm onSubmit={handleSubmit} isLoading={isLoading} />
     </AuthLayout>
