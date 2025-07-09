@@ -4,6 +4,7 @@ import { ValidationStats } from '../types/validation';
 import { apiClient } from '../services/api';
 import { analyticsService } from '../services/analytics';
 import { API_ENDPOINTS } from '../utils/constants';
+import { useAuthStore } from './authStore';
 
 interface ValidationStore {
   results: ValidationResult[];
