@@ -28,25 +28,21 @@ describe('validationStore', () => {
   });
 
   describe('validateSingle', () => {
-    it('should transform Xano email validation response correctly', async () => {
-      // Arrange: Mock Xano response for email validation
+    it('should transform REAL Xano email validation response correctly', async () => {
+      // Arrange: Mock ACTUAL Xano response structure 
       const xanoResponse = {
         data: {
-          id: 123,
-          email: 'test@gmail.com',
-          phone: null,
-          credits_used: 1,
-          created_at: 1704067200000, // 2024-01-01T00:00:00.000Z in milliseconds
-          validation_details: {
-            email_result: {
-              valid: true,
-              domain: 'gmail.com',
-              disposable: false,
-              country: 'US',
-              provider: 'Google',
-            },
-            phone_result: null,
+          email: {
+            valid: true,
+            provided: true
           },
+          phone: {
+            valid: false, 
+            provided: false
+          },
+          cached: false,
+          success: true,
+          credits_remaining: 496
         },
       };
 
@@ -57,21 +53,16 @@ describe('validationStore', () => {
         email: 'test@gmail.com',
       });
 
-      // Assert: Verify the transformation
+      // Assert: Verify the transformation handles REAL response structure
       expect(result).toEqual({
-        id: '123',
+        id: expect.any(String),
         email: 'test@gmail.com',
         phone: '',
-        status: 'valid',
+        status: 'valid', // email.valid is true
         confidence: 100,
-        creditsUsed: 1,
-        details: {
-          domain: 'gmail.com',
-          disposable: 'false',
-          country: 'US',
-          provider: 'Google',
-        },
-        createdAt: '2024-01-01T00:00:00.000Z',
+        creditsUsed: 1, // Should derive from credits_remaining change
+        details: {}, // No additional details in this response format
+        createdAt: expect.any(String),
       });
 
       // Verify API call was made with correct data
@@ -84,24 +75,21 @@ describe('validationStore', () => {
       );
     });
 
-    it('should transform Xano phone validation response correctly', async () => {
-      // Arrange: Mock Xano response for phone validation
+    it('should transform REAL Xano phone validation response correctly', async () => {
+      // Arrange: Mock ACTUAL Xano response for phone validation
       const xanoResponse = {
         data: {
-          id: 124,
-          email: null,
-          phone: '+16472965544',
-          credits_used: 1,
-          created_at: 1704067200000,
-          validation_details: {
-            email_result: null,
-            phone_result: {
-              valid: true,
-              carrier: 'T-Mobile',
-              lineType: 'mobile',
-              country: 'CA',
-            },
+          email: {
+            valid: false,
+            provided: false
           },
+          phone: {
+            valid: true,
+            provided: true
+          },
+          cached: false,
+          success: true,
+          credits_remaining: 495
         },
       };
 
@@ -114,45 +102,32 @@ describe('validationStore', () => {
 
       // Assert
       expect(result).toEqual({
-        id: '124',
+        id: expect.any(String),
         email: '',
         phone: '+16472965544',
-        status: 'valid',
+        status: 'valid', // phone.valid is true
         confidence: 100,
         creditsUsed: 1,
-        details: {
-          carrier: 'T-Mobile',
-          lineType: 'mobile',
-          country: 'CA',
-        },
-        createdAt: '2024-01-01T00:00:00.000Z',
+        details: {},
+        createdAt: expect.any(String),
       });
     });
 
     it('should handle both email and phone validation', async () => {
-      // Arrange: Mock Xano response for both email and phone
+      // Arrange: Mock REAL Xano response for both email and phone
       const xanoResponse = {
         data: {
-          id: 125,
-          email: 'test@example.com',
-          phone: '+16472965544',
-          credits_used: 2,
-          created_at: 1704067200000,
-          validation_details: {
-            email_result: {
-              valid: false,
-              domain: 'example.com',
-              disposable: true,
-              country: 'US',
-              provider: 'Unknown',
-            },
-            phone_result: {
-              valid: true,
-              carrier: 'Bell',
-              lineType: 'mobile',
-              country: 'CA',
-            },
+          email: {
+            valid: false,
+            provided: true
           },
+          phone: {
+            valid: true,
+            provided: true
+          },
+          cached: false,
+          success: true,
+          credits_remaining: 494
         },
       };
 
@@ -166,48 +141,32 @@ describe('validationStore', () => {
 
       // Assert: Should be valid if either email OR phone is valid
       expect(result).toEqual({
-        id: '125',
+        id: expect.any(String),
         email: 'test@example.com',
         phone: '+16472965544',
         status: 'valid', // Phone is valid, so overall status is valid
         confidence: 100,
-        creditsUsed: 2,
-        details: {
-          domain: 'example.com',
-          disposable: 'true',
-          country: 'US', // Email country takes precedence, phone country not added if email country exists
-          provider: 'Unknown',
-          carrier: 'Bell',
-          lineType: 'mobile',
-        },
-        createdAt: '2024-01-01T00:00:00.000Z',
+        creditsUsed: 1,
+        details: {},
+        createdAt: expect.any(String),
       });
     });
 
     it('should handle invalid validation results', async () => {
-      // Arrange: Mock Xano response with invalid results
+      // Arrange: Mock REAL Xano response with invalid results
       const xanoResponse = {
         data: {
-          id: 126,
-          email: 'invalid@invalid.com',
-          phone: '+1234567890',
-          credits_used: 2,
-          created_at: 1704067200000,
-          validation_details: {
-            email_result: {
-              valid: false,
-              domain: 'invalid.com',
-              disposable: false,
-              country: null,
-              provider: null,
-            },
-            phone_result: {
-              valid: false,
-              carrier: null,
-              lineType: null,
-              country: null,
-            },
+          email: {
+            valid: false,
+            provided: true
           },
+          phone: {
+            valid: false,
+            provided: true
+          },
+          cached: false,
+          success: true,
+          credits_remaining: 493
         },
       };
 
@@ -221,125 +180,32 @@ describe('validationStore', () => {
 
       // Assert
       expect(result).toEqual({
-        id: '126',
+        id: expect.any(String),
         email: 'invalid@invalid.com',
         phone: '+1234567890',
         status: 'invalid',
         confidence: 0,
-        creditsUsed: 2,
-        details: {
-          domain: 'invalid.com',
-          disposable: 'false',
-        },
-        createdAt: '2024-01-01T00:00:00.000Z',
-      });
-    });
-
-    it('should handle missing validation_details gracefully', async () => {
-      // Arrange: Mock Xano response without validation_details
-      const xanoResponse = {
-        data: {
-          id: 127,
-          email: 'test@test.com',
-          phone: null,
-          credits_used: 1,
-          created_at: 1704067200000,
-          // Missing validation_details entirely
-        },
-      };
-
-      vi.mocked(apiClient.post).mockResolvedValue(xanoResponse);
-
-      // Act
-      const result = await useValidationStore.getState().validateSingle({
-        email: 'test@test.com',
-      });
-
-      // Assert
-      expect(result).toEqual({
-        id: '127',
-        email: 'test@test.com',
-        phone: '',
-        status: 'unknown',
-        confidence: 0,
         creditsUsed: 1,
         details: {},
-        createdAt: '2024-01-01T00:00:00.000Z',
+        createdAt: expect.any(String),
       });
-    });
-
-    it('should handle invalid timestamp gracefully', async () => {
-      // Arrange: Mock Xano response with invalid timestamp
-      const xanoResponse = {
-        data: {
-          id: 128,
-          email: 'test@test.com',
-          phone: null,
-          credits_used: 1,
-          created_at: 'invalid-timestamp',
-          validation_details: {
-            email_result: {
-              valid: true,
-              domain: 'test.com',
-            },
-          },
-        },
-      };
-
-      vi.mocked(apiClient.post).mockResolvedValue(xanoResponse);
-
-      // Act
-      const result = await useValidationStore.getState().validateSingle({
-        email: 'test@test.com',
-      });
-
-      // Assert: Should use fallback timestamp
-      expect(result.createdAt).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/);
-      expect(result.status).toBe('valid');
-    });
-
-    it('should handle missing timestamp gracefully', async () => {
-      // Arrange: Mock Xano response without timestamp
-      const xanoResponse = {
-        data: {
-          id: 129,
-          email: 'test@test.com',
-          credits_used: 1,
-          // Missing created_at
-          validation_details: {
-            email_result: {
-              valid: true,
-              domain: 'test.com',
-            },
-          },
-        },
-      };
-
-      vi.mocked(apiClient.post).mockResolvedValue(xanoResponse);
-
-      // Act
-      const result = await useValidationStore.getState().validateSingle({
-        email: 'test@test.com',
-      });
-
-      // Assert: Should use fallback timestamp
-      expect(result.createdAt).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/);
     });
 
     it('should add result to store results', async () => {
-      // Arrange
+      // Arrange: Mock REAL Xano response
       const xanoResponse = {
         data: {
-          id: 130,
-          email: 'store@test.com',
-          credits_used: 1,
-          created_at: 1704067200000,
-          validation_details: {
-            email_result: {
-              valid: true,
-              domain: 'test.com',
-            },
+          email: {
+            valid: true,
+            provided: true
           },
+          phone: {
+            valid: false,
+            provided: false
+          },
+          cached: false,
+          success: true,
+          credits_remaining: 492
         },
       };
 

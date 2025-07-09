@@ -56,11 +56,18 @@ export const useValidationStore = create<ValidationStore>((set, get) => ({
         validationData
       );
       
-      // Transform Xano response to match ValidationResult interface
-      // Xano returns nested validation_details with email_result and phone_result
-      const validationDetails = response.data.validation_details || {};
-      const emailResult = validationDetails.email_result || {};
-      const phoneResult = validationDetails.phone_result || {};
+      // Transform REAL Xano response to match ValidationResult interface
+      // ACTUAL Xano response structure:
+      // {
+      //   email: {valid: true, provided: true},
+      //   phone: {valid: false, provided: false}, 
+      //   cached: false,
+      //   success: true,
+      //   credits_remaining: 496
+      // }
+      
+      const emailResult = response.data.email || {};
+      const phoneResult = response.data.phone || {};
       
       // Determine overall status based on email/phone validation
       let status = 'unknown';
@@ -73,39 +80,23 @@ export const useValidationStore = create<ValidationStore>((set, get) => ({
       // Calculate confidence: 100 if valid, 0 if invalid
       const confidence = status === 'valid' ? 100 : 0;
       
-      // Flatten validation details into expected structure
+      // Extract the actual email/phone strings from input data (not from response objects)
+      const emailString = data.email || '';
+      const phoneString = data.phone || '';
+      
+      // For now, details are minimal since this response format doesn't include domain/carrier info
       const details: Record<string, string> = {};
       
-      // Extract email-specific details
-      if (emailResult.domain) details.domain = String(emailResult.domain);
-      if (emailResult.disposable !== undefined) details.disposable = String(emailResult.disposable);
-      if (emailResult.country) details.country = String(emailResult.country);
-      if (emailResult.provider) details.provider = String(emailResult.provider);
-      
-      // Extract phone-specific details  
-      if (phoneResult.carrier) details.carrier = String(phoneResult.carrier);
-      if (phoneResult.lineType) details.lineType = String(phoneResult.lineType);
-      if (phoneResult.country && !details.country) details.country = String(phoneResult.country);
-      
-      // Handle timestamp robustly
-      let createdAt = new Date().toISOString();
-      if (response.data.created_at) {
-        try {
-          // Xano timestamps are in milliseconds
-          createdAt = new Date(response.data.created_at).toISOString();
-        } catch (e) {
-          // Fallback to current time if timestamp is invalid
-          createdAt = new Date().toISOString();
-        }
-      }
+      // Handle timestamp robustly - use current time since response doesn't include timestamp
+      const createdAt = new Date().toISOString();
 
       const result: ValidationResult = {
-        id: response.data.id?.toString() || Date.now().toString(),
-        email: response.data.email || data.email || '',
-        phone: response.data.phone || data.phone || '',
+        id: Date.now().toString(), // Generate ID since response doesn't include one
+        email: emailString,
+        phone: phoneString,
         status,
         confidence,
-        creditsUsed: response.data.credits_used || 1,
+        creditsUsed: 1, // Default since response doesn't specify credits used per validation
         details,
         createdAt
       };
