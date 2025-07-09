@@ -32,13 +32,11 @@ export const Landing: React.FC = () => {
                 <Link to="/pricing" className="text-gray-700 hover:text-gray-900 font-medium">
                   Pricing
                 </Link>
-                <div className="flex items-center">
-                  <svg className="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none">
-                    <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z" fill="#FF4A00"/>
-                    <path d="M8 12h8M12 8v8" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-                  </svg>
-                  <span className="text-orange-600 font-medium">zapier</span>
-                </div>
+                <img 
+                  src="/Zapier_logo.svg.png" 
+                  alt="Zapier" 
+                  className="h-6"
+                />
               </nav>
             </div>
             
