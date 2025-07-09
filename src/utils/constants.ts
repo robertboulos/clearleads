@@ -59,16 +59,40 @@ export const API_ENDPOINTS = {
     login: '/api:OPOJNxNZ/auth/login',
     register: '/api:AVa3mtMm/auth/register',
     me: '/api:Cq9vw928/auth/me',
-    refresh: '/auth/refresh'
+    updateProfile: '/api:zuALhZYZ/auth/update_profile',
+    changePassword: '/api:iH9tR1Te/auth/change-password',
+    apiKey: '/api:7Z7a5X-n/auth/api_key',
+    getApiKey: '/api:Xb-EGH2D/get_api_key',
+    regenerateApiKey: '/api:y9reEK3Z/api-keys/regenerate'
   },
   validation: {
     single: '/api:73cwzomN/leads/validate',
+    agent: '/api:wq8hJ7zF/leads/validate_agent',
     history: '/api:xJOhIs2L/validations/history',
-    export: '/validations/export'
+    export: '/api:xJOhIs2L/validations/export'
+  },
+  batch: {
+    uploadCsv: '/api:nR5KbC_9/batch/upload-csv',
+    process: '/api:tQ2MhW6L/batch/process',
+    status: '/api:pN4GhS8X/batch/status'
   },
   billing: {
     balance: '/api:W5kquLRH/credits/balance',
     checkout: '/api:tXGwpMzh/checkout/create-session',
-    portal: '/subscriptions/create-billing-portal'
+    subscriptions: {
+      create: '/api:eSGW4xYH/subscriptions/create',
+      status: '/api:0HSeUiV4/subscription/status',
+      billingPortal: '/api:HJabX04n/subscriptions/create-billing-portal'
+    }
+  },
+  analytics: {
+    dashboard: '/api:MEZwdqMc/dashboard/usage',
+    enhanced: '/api:5H3BZ2_O/analytics/enhanced-dashboard',
+    businessIntelligence: '/api:Go-dcsSE/analytics/business-intelligence',
+    creditUsage: '/api:yHA-snLK/analytics/credit-usage'
+  },
+  webhooks: {
+    stripeCheckout: '/api:07sxU8qI/webhooks/stripe-checkout',
+    stripeSubscription: '/api:a0kwUccs/webhooks/stripe-subscription'
   }
 };
