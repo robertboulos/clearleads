@@ -8,10 +8,10 @@ import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 
 const registerSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
-  confirmPassword: z.string(),
+  name: z.string().min(1, 'Name is required').min(2, 'Name must be at least 2 characters'),
+  email: z.string().min(1, 'Email is required').email('Invalid email address'),
+  password: z.string().min(1, 'Password is required').min(8, 'Password must be at least 8 characters'),
+  confirmPassword: z.string().min(1, 'Please confirm your password'),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords don't match",
   path: ["confirmPassword"],
@@ -25,14 +25,30 @@ interface RegisterFormProps {
 }
 
 export const RegisterForm: React.FC<RegisterFormProps> = ({ onSubmit, isLoading }) => {
-  const { register, handleSubmit, formState: { errors } } = useForm<RegisterFormData>({
-    resolver: zodResolver(registerSchema)
+  const { 
+    register, 
+    handleSubmit, 
+    formState: { errors },
+    watch
+  } = useForm<RegisterFormData>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      password: '',
+      confirmPassword: ''
+    }
   });
 
   const handleFormSubmit = (data: RegisterFormData) => {
     const { confirmPassword, ...submitData } = data;
     return onSubmit(submitData);
   };
+
+  // Watch form values for debugging
+  const watchedValues = watch();
+  console.log('Register form values:', watchedValues);
+  console.log('Register form errors:', errors);
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
@@ -43,6 +59,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSubmit, isLoading 
         icon={<User className="w-5 h-5 text-gray-400" />}
         error={errors.name?.message}
         placeholder="Enter your full name"
+        autoComplete="name"
       />
 
       <Input
@@ -52,6 +69,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSubmit, isLoading 
         icon={<Mail className="w-5 h-5 text-gray-400" />}
         error={errors.email?.message}
         placeholder="Enter your email"
+        autoComplete="email"
       />
 
       <Input
@@ -61,6 +79,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSubmit, isLoading 
         icon={<Lock className="w-5 h-5 text-gray-400" />}
         error={errors.password?.message}
         placeholder="Enter your password"
+        autoComplete="new-password"
       />
 
       <Input
@@ -70,6 +89,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSubmit, isLoading 
         icon={<Lock className="w-5 h-5 text-gray-400" />}
         error={errors.confirmPassword?.message}
         placeholder="Confirm your password"
+        autoComplete="new-password"
       />
 
       <div className="flex items-center">

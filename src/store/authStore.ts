@@ -1,10 +1,10 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { UserProfile } from '../types/user';
+import { User } from '../types/api';
 import { authService, LoginCredentials, RegisterData } from '../services/auth';
 
 interface AuthStore {
-  user: UserProfile | null;
+  user: User | null;
   token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
@@ -12,7 +12,7 @@ interface AuthStore {
   register: (data: RegisterData) => Promise<void>;
   logout: () => void;
   refreshUser: () => Promise<void>;
-  updateUser: (updates: Partial<UserProfile>) => void;
+  updateUser: (updates: Partial<User>) => void;
 }
 
 export const useAuthStore = create<AuthStore>()(
@@ -24,11 +24,10 @@ export const useAuthStore = create<AuthStore>()(
       isLoading: false,
 
       login: async (credentials: LoginCredentials) => {
+        console.log('Login attempt with:', credentials);
         set({ isLoading: true });
         try {
           const response = await authService.login(credentials);
-          localStorage.setItem('token', response.token);
-          localStorage.setItem('refreshToken', response.refreshToken);
           set({
             user: response.user,
             token: response.token,
@@ -36,17 +35,17 @@ export const useAuthStore = create<AuthStore>()(
             isLoading: false,
           });
         } catch (error) {
+          console.error('Login error:', error);
           set({ isLoading: false });
           throw error;
         }
       },
 
       register: async (data: RegisterData) => {
+        console.log('Register attempt with:', data);
         set({ isLoading: true });
         try {
           const response = await authService.register(data);
-          localStorage.setItem('token', response.token);
-          localStorage.setItem('refreshToken', response.refreshToken);
           set({
             user: response.user,
             token: response.token,
@@ -54,6 +53,7 @@ export const useAuthStore = create<AuthStore>()(
             isLoading: false,
           });
         } catch (error) {
+          console.error('Register error:', error);
           set({ isLoading: false });
           throw error;
         }
@@ -76,11 +76,12 @@ export const useAuthStore = create<AuthStore>()(
           const user = await authService.me();
           set({ user });
         } catch (error) {
+          console.error('Refresh user error:', error);
           get().logout();
         }
       },
 
-      updateUser: (updates: Partial<UserProfile>) => {
+      updateUser: (updates: Partial<User>) => {
         const currentUser = get().user;
         if (currentUser) {
           set({ user: { ...currentUser, ...updates } });

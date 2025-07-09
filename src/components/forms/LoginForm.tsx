@@ -8,8 +8,8 @@ import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 
 const loginSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
+  email: z.string().min(1, 'Email is required').email('Invalid email address'),
+  password: z.string().min(1, 'Password is required').min(6, 'Password must be at least 6 characters'),
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
@@ -20,9 +20,23 @@ interface LoginFormProps {
 }
 
 export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, isLoading }) => {
-  const { register, handleSubmit, formState: { errors } } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema)
+  const { 
+    register, 
+    handleSubmit, 
+    formState: { errors },
+    watch
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: '',
+      password: ''
+    }
   });
+
+  // Watch form values for debugging
+  const watchedValues = watch();
+  console.log('Form values:', watchedValues);
+  console.log('Form errors:', errors);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -33,6 +47,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, isLoading }) => 
         icon={<Mail className="w-5 h-5 text-gray-400" />}
         error={errors.email?.message}
         placeholder="Enter your email"
+        autoComplete="email"
       />
 
       <Input
@@ -42,6 +57,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, isLoading }) => 
         icon={<Lock className="w-5 h-5 text-gray-400" />}
         error={errors.password?.message}
         placeholder="Enter your password"
+        autoComplete="current-password"
       />
 
       <div className="flex items-center justify-between">
