@@ -32,11 +32,13 @@ export const Landing: React.FC = () => {
                 <Link to="/pricing" className="text-gray-700 hover:text-gray-900 font-medium">
                   Pricing
                 </Link>
-                <img 
-                  src="/Untitled_design_-_2025-02-19T120300.582.png" 
-                  alt="Zapier" 
-                  className="h-8"
-                />
+                <div className="mt-1">
+                  <img 
+                    src="/Untitled_design_-_2025-02-19T120300.582.png" 
+                    alt="Zapier" 
+                    className="h-10"
+                  />
+                </div>
               </nav>
             </div>
             
