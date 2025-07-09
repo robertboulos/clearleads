@@ -46,16 +46,25 @@ export interface AuthResponse {
 
 export const authService = {
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
+    // Validate credentials before sending
+    if (!credentials.email || !credentials.password) {
+      throw new Error('Email and password are required');
+    }
+    
     const response = await apiClient.post<XanoLoginResponse>(
       API_ENDPOINTS.auth.login,
-      credentials
+      {
+        email: credentials.email.trim(),
+        password: credentials.password
+      }
     );
     
     // Store token and fetch user data
     const token = response.data.authToken;
     localStorage.setItem('token', token);
     
-    const userResponse = await apiClient.get<XanoUserResponse>(API_ENDPOINTS.auth.me);
+    // Use auth/verify instead of auth/me since auth/me has 403 issues
+    const userResponse = await apiClient.get<XanoUserResponse>(API_ENDPOINTS.auth.verify);
     
     const user: User = {
       id: userResponse.data.id.toString(),
@@ -95,7 +104,8 @@ export const authService = {
   },
 
   async me(): Promise<User> {
-    const response = await apiClient.get<XanoUserResponse>(API_ENDPOINTS.auth.me);
+    // Use auth/verify instead of auth/me since auth/me has 403 issues
+    const response = await apiClient.get<XanoUserResponse>(API_ENDPOINTS.auth.verify);
     
     const user: User = {
       id: response.data.id.toString(),

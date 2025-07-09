@@ -56,43 +56,44 @@ export const VALIDATION_STATUSES = {
 
 export const API_ENDPOINTS = {
   auth: {
-    login: '/api:OPOJNxNZ/auth/login',
-    register: '/api:AVa3mtMm/auth/register',
-    me: '/api:Cq9vw928/auth/me',
-    updateProfile: '/api:zuALhZYZ/auth/update_profile',
-    changePassword: '/api:iH9tR1Te/auth/change-password',
-    apiKey: '/api:7Z7a5X-n/auth/api_key',
-    getApiKey: '/api:Xb-EGH2D/get_api_key',
-    regenerateApiKey: '/api:y9reEK3Z/api-keys/regenerate'
+    login: '/api:Is1L6GFg/auth/login',
+    register: '/api:Is1L6GFg/auth/register',
+    me: '/api:Is1L6GFg/auth/me',
+    verify: '/api:Is1L6GFg/auth/verify',
+    updateProfile: '/api:Is1L6GFg/auth/update_profile',
+    changePassword: '/api:Is1L6GFg/auth/change-password',
+    apiKey: '/api:Is1L6GFg/auth/api_key',
+    getApiKey: '/api:Is1L6GFg/get_api_key',
+    regenerateApiKey: '/api:Is1L6GFg/api-keys/regenerate'
   },
   validation: {
-    single: '/api:73cwzomN/leads/validate',
-    agent: '/api:wq8hJ7zF/leads/validate_agent',
-    history: '/api:xJOhIs2L/validations/history',
-    export: '/api:xJOhIs2L/validations/export'
+    single: '/api:T86UHsBm/leads/validate',
+    agent: '/api:T86UHsBm/leads/validate_agent',
+    history: '/api:T86UHsBm/validations/history',
+    export: '/api:T86UHsBm/validations/export'
   },
   batch: {
-    uploadCsv: '/api:nR5KbC_9/batch/upload-csv',
-    process: '/api:tQ2MhW6L/batch/process',
-    status: '/api:pN4GhS8X/batch/status'
+    uploadCsv: '/api:ZnbSzzpu/batch/upload-csv',
+    process: '/api:ZnbSzzpu/batch/process',
+    status: '/api:ZnbSzzpu/batch/status'
   },
   billing: {
-    balance: '/api:W5kquLRH/credits/balance',
-    checkout: '/api:tXGwpMzh/checkout/create-session',
+    balance: '/api:Is1L6GFg/credits/balance',
+    checkout: '/api:rKeV8O3i/checkout/create-session',
     subscriptions: {
-      create: '/api:eSGW4xYH/subscriptions/create',
-      status: '/api:0HSeUiV4/subscription/status',
-      billingPortal: '/api:HJabX04n/subscriptions/create-billing-portal'
+      create: '/api:sXZrg4Gz/subscriptions/create',
+      status: '/api:sXZrg4Gz/subscription/status',
+      billingPortal: '/api:sXZrg4Gz/subscriptions/create-billing-portal'
     }
   },
   analytics: {
-    dashboard: '/api:MEZwdqMc/dashboard/usage',
-    enhanced: '/api:5H3BZ2_O/analytics/enhanced-dashboard',
-    businessIntelligence: '/api:Go-dcsSE/analytics/business-intelligence',
-    creditUsage: '/api:yHA-snLK/analytics/credit-usage'
+    dashboard: '/api:Is1L6GFg/dashboard/usage',
+    enhanced: '/api:tBpehOS-/analytics/enhanced-dashboard',
+    businessIntelligence: '/api:tBpehOS-/analytics/business-intelligence',
+    creditUsage: '/api:tBpehOS-/analytics/credit-usage'
   },
   webhooks: {
-    stripeCheckout: '/api:07sxU8qI/webhooks/stripe-checkout',
-    stripeSubscription: '/api:a0kwUccs/webhooks/stripe-subscription'
+    stripeCheckout: '/api:rKeV8O3i/webhooks/stripe-checkout',
+    stripeSubscription: '/api:sXZrg4Gz/webhooks/stripe-subscription'
   }
 };
