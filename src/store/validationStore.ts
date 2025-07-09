@@ -17,7 +17,15 @@ interface ValidationStore {
   fetchStats: () => Promise<void>;
   addResult: (result: ValidationResult) => void;
   clearResults: () => void;
+  sanitizeExistingResults: () => void;
 }
+
+// Helper function to ensure all values are safe for React rendering
+const sanitizeForReact = (value: any): string => {
+  if (value === null || value === undefined) return '';
+  if (typeof value === 'object') return JSON.stringify(value);
+  return String(value);
+};
 
 export const useValidationStore = create<ValidationStore>((set, get) => ({
   results: [],
@@ -59,7 +67,7 @@ export const useValidationStore = create<ValidationStore>((set, get) => ({
         details: response.data.details ? Object.fromEntries(
           Object.entries(response.data.details).map(([key, value]) => [
             key,
-            typeof value === 'object' && value !== null ? JSON.stringify(value) : String(value || '')
+            sanitizeForReact(value)
           ])
         ) : {},
         createdAt: response.data.created_at || new Date().toISOString()
@@ -124,12 +132,38 @@ export const useValidationStore = create<ValidationStore>((set, get) => ({
   },
 
   addResult: (result: ValidationResult) => {
+    // Sanitize the result to ensure no objects are in details
+    const sanitizedResult: ValidationResult = {
+      ...result,
+      details: Object.fromEntries(
+        Object.entries(result.details).map(([key, value]) => [
+          key,
+          sanitizeForReact(value)
+        ])
+      )
+    };
+    
     set(state => ({
-      results: [result, ...state.results]
+      results: [sanitizedResult, ...state.results]
     }));
   },
 
   clearResults: () => {
     set({ results: [] });
+  },
+
+  // Clear any existing results that might have object fields
+  sanitizeExistingResults: () => {
+    set(state => ({
+      results: state.results.map(result => ({
+        ...result,
+        details: Object.fromEntries(
+          Object.entries(result.details).map(([key, value]) => [
+            key,
+            sanitizeForReact(value)
+          ])
+        )
+      }))
+    }));
   },
 }));

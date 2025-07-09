@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { useValidationStore } from '../store/validationStore';
 import { useCreditsStore } from '../store/creditsStore';
@@ -22,12 +22,17 @@ import { Input } from '../components/ui/Input';
 import toast from 'react-hot-toast';
 
 export const Validate: React.FC = () => {
-  const { validateSingle, results, isLoading } = useValidationStore();
+  const { validateSingle, results, isLoading, clearResults } = useValidationStore();
   const { balance, deductCredits } = useCreditsStore();
   const [selectedResult, setSelectedResult] = useState<ValidationResult | null>(null);
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [validationType, setValidationType] = useState<'email' | 'phone' | 'both'>('email');
+
+  // Clear any existing results that might have object fields on component mount
+  useEffect(() => {
+    clearResults();
+  }, [clearResults]);
 
   const handleValidate = async () => {
     if (!email && !phone) {
