@@ -28,16 +28,18 @@ export const useValidationStore = create<ValidationStore>((set, get) => ({
   validateSingle: async (data: { email?: string; phone?: string }) => {
     set({ isLoading: true });
     try {
-      // Get user's API key from localStorage or auth store
-      const token = localStorage.getItem('token');
-      if (!token) {
-        throw new Error('No authentication token found');
+      // Get user's actual API key from auth store
+      const authState = useAuthStore.getState();
+      const userApiKey = authState.user?.apiKey;
+      
+      if (!userApiKey) {
+        throw new Error('User API key not found. Please login again.');
       }
       
-      // Add API key to validation request
+      // Add actual API key to validation request
       const validationData = {
         ...data,
-        api_key: 'from_token' // Backend will extract from Bearer token
+        api_key: userApiKey // Use the actual user's API key
       };
       
       const response = await apiClient.post<ValidationResult>(
