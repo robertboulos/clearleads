@@ -57,20 +57,57 @@ export const useValidationStore = create<ValidationStore>((set, get) => ({
       );
       
       // Transform Xano response to match ValidationResult interface
+      // Xano returns nested validation_details with email_result and phone_result
+      const validationDetails = response.data.validation_details || {};
+      const emailResult = validationDetails.email_result || {};
+      const phoneResult = validationDetails.phone_result || {};
+      
+      // Determine overall status based on email/phone validation
+      let status = 'unknown';
+      if (emailResult.valid === true || phoneResult.valid === true) {
+        status = 'valid';
+      } else if (emailResult.valid === false || phoneResult.valid === false) {
+        status = 'invalid';
+      }
+      
+      // Calculate confidence: 100 if valid, 0 if invalid
+      const confidence = status === 'valid' ? 100 : 0;
+      
+      // Flatten validation details into expected structure
+      const details: Record<string, string> = {};
+      
+      // Extract email-specific details
+      if (emailResult.domain) details.domain = String(emailResult.domain);
+      if (emailResult.disposable !== undefined) details.disposable = String(emailResult.disposable);
+      if (emailResult.country) details.country = String(emailResult.country);
+      if (emailResult.provider) details.provider = String(emailResult.provider);
+      
+      // Extract phone-specific details  
+      if (phoneResult.carrier) details.carrier = String(phoneResult.carrier);
+      if (phoneResult.lineType) details.lineType = String(phoneResult.lineType);
+      if (phoneResult.country && !details.country) details.country = String(phoneResult.country);
+      
+      // Handle timestamp robustly
+      let createdAt = new Date().toISOString();
+      if (response.data.created_at) {
+        try {
+          // Xano timestamps are in milliseconds
+          createdAt = new Date(response.data.created_at).toISOString();
+        } catch (e) {
+          // Fallback to current time if timestamp is invalid
+          createdAt = new Date().toISOString();
+        }
+      }
+
       const result: ValidationResult = {
         id: response.data.id?.toString() || Date.now().toString(),
         email: response.data.email || data.email || '',
         phone: response.data.phone || data.phone || '',
-        status: response.data.status || 'unknown',
-        confidence: response.data.confidence || 0,
+        status,
+        confidence,
         creditsUsed: response.data.credits_used || 1,
-        details: response.data.details ? Object.fromEntries(
-          Object.entries(response.data.details).map(([key, value]) => [
-            key,
-            sanitizeForReact(value)
-          ])
-        ) : {},
-        createdAt: response.data.created_at || new Date().toISOString()
+        details,
+        createdAt
       };
       
       // Add to results
