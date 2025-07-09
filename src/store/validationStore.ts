@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { ValidationResult, BatchValidation } from '../types/api';
 import { ValidationStats } from '../types/validation';
 import { apiClient } from '../services/api';
+import { analyticsService } from '../services/analytics';
 import { API_ENDPOINTS } from '../utils/constants';
 
 interface ValidationStore {
@@ -65,8 +66,23 @@ export const useValidationStore = create<ValidationStore>((set, get) => ({
 
   fetchStats: async () => {
     try {
-      const response = await apiClient.get<ValidationStats>('/validations/stats');
-      set({ stats: response.data });
+      const dashboardData = await analyticsService.getDashboardUsage();
+      
+      // Map DashboardUsage to ValidationStats
+      const stats: ValidationStats = {
+        totalValidations: dashboardData.total_validations,
+        successRate: dashboardData.success_rate,
+        creditsUsed: dashboardData.credits_used,
+        averageConfidence: 0, // Not available in DashboardUsage, using default
+        topDomains: [], // Not available in DashboardUsage, using empty array
+        dailyUsage: dashboardData.daily_usage.map(day => ({
+          date: day.date,
+          count: day.validations,
+          successRate: 0 // Not available in daily_usage, using default
+        }))
+      };
+      
+      set({ stats });
     } catch (error) {
       console.error('Failed to fetch stats:', error);
     }
