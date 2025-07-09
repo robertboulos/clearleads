@@ -43,11 +43,27 @@ export const useValidationStore = create<ValidationStore>((set, get) => ({
         api_key: userApiKey // Use the actual user's API key
       };
       
-      const response = await apiClient.post<ValidationResult>(
+      const response = await apiClient.post<any>(
         API_ENDPOINTS.validation.single,
         validationData
       );
-      const result = response.data;
+      
+      // Transform Xano response to match ValidationResult interface
+      const result: ValidationResult = {
+        id: response.data.id?.toString() || Date.now().toString(),
+        email: response.data.email || data.email || '',
+        phone: response.data.phone || data.phone || '',
+        status: response.data.status || 'unknown',
+        confidence: response.data.confidence || 0,
+        creditsUsed: response.data.credits_used || 1,
+        details: response.data.details ? Object.fromEntries(
+          Object.entries(response.data.details).map(([key, value]) => [
+            key,
+            typeof value === 'object' && value !== null ? JSON.stringify(value) : String(value || '')
+          ])
+        ) : {},
+        createdAt: response.data.created_at || new Date().toISOString()
+      };
       
       // Add to results
       set(state => ({
