@@ -52,13 +52,20 @@ class ApiClient {
     params?: any
   ): Promise<ApiResponse<T>> {
     try {
-      const response: AxiosResponse<ApiResponse<T>> = await this.client.request({
+      const response: AxiosResponse<T> = await this.client.request({
         method,
         url,
         data,
         params,
       });
-      return response.data;
+      
+      // Xano returns data directly, not wrapped in ApiResponse format
+      // So we need to wrap it in our expected format
+      return {
+        data: response.data,
+        success: true,
+        message: undefined
+      };
     } catch (error: any) {
       if (error.response?.data) {
         throw error.response.data;
