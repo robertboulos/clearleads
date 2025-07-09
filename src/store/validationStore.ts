@@ -98,11 +98,6 @@ export const useValidationStore = create<ValidationStore>((set, get) => ({
           count: day.validations,
           successRate: 0 // Not available in daily_usage, using default
         }))
-        dailyUsage: (dashboardData.daily_usage || []).map(day => ({
-          date: day.date,
-          count: day.validations,
-          successRate: 0 // Not available in daily_usage, using default
-        }))
       };
       
       set({ stats });
