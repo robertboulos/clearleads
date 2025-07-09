@@ -33,7 +33,10 @@ export const Landing: React.FC = () => {
                   Pricing
                 </Link>
                 <div className="flex items-center">
-                  <img src="https://cdn.zapier.com/zapier/images/logo-1.png" alt="Zapier" className="w-6 h-6 mr-2" />
+                  <svg className="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z" fill="#FF4A00"/>
+                    <path d="M8 12h8M12 8v8" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
                   <span className="text-orange-600 font-medium">zapier</span>
                 </div>
               </nav>
