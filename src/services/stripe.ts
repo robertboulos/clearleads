@@ -12,18 +12,29 @@ export interface BillingPortal {
 
 export const stripeService = {
   async createCheckoutSession(planId: string): Promise<CheckoutSession> {
-    const response = await apiClient.post<CheckoutSession>(
-      API_ENDPOINTS.billing.checkout,
-      { planId }
-    );
-    return response.data;
+    const response = await apiClient.post<{
+      checkout_url: string;
+      session_id: string;
+    }>(API_ENDPOINTS.billing.checkout, { 
+      package_type: planId  // Backend expects 'package_type', not 'planId'
+    });
+    
+    // Map backend response to frontend interface
+    return {
+      sessionId: response.data.session_id,
+      checkoutUrl: response.data.checkout_url
+    };
   },
 
   async createBillingPortal(): Promise<BillingPortal> {
-    const response = await apiClient.post<BillingPortal>(
-      API_ENDPOINTS.billing.portal
-    );
-    return response.data;
+    const response = await apiClient.post<{
+      portal_url: string;
+    }>(API_ENDPOINTS.billing.subscriptions.billingPortal);
+    
+    // Map backend response to frontend interface
+    return {
+      portalUrl: response.data.portal_url
+    };
   },
 
   redirectToCheckout(sessionId: string) {

@@ -21,10 +21,21 @@ export const useCreditsStore = create<CreditsStore>((set, get) => ({
   fetchBalance: async () => {
     set({ isLoading: true });
     try {
-      const response = await apiClient.get<{ balance: number }>(
-        API_ENDPOINTS.billing.balance
-      );
-      set({ balance: response.data.balance, isLoading: false });
+      const response = await apiClient.get<{
+        success: boolean;
+        data: {
+          current_balance: number;
+          total_used: number;
+          quota_reset_date: string | null;
+          recent_transactions: any[];
+        };
+      }>(API_ENDPOINTS.billing.balance);
+      
+      set({ 
+        balance: response.data.data.current_balance,
+        transactions: response.data.data.recent_transactions || [],
+        isLoading: false 
+      });
     } catch (error) {
       set({ isLoading: false });
       console.error('Failed to fetch balance:', error);
@@ -33,10 +44,19 @@ export const useCreditsStore = create<CreditsStore>((set, get) => ({
 
   fetchTransactions: async () => {
     try {
-      const response = await apiClient.get<CreditTransaction[]>(
-        '/credits/transactions'
-      );
-      set({ transactions: response.data });
+      // Use the balance endpoint which includes recent transactions
+      // The hardcoded '/credits/transactions' endpoint doesn't exist
+      const response = await apiClient.get<{
+        success: boolean;
+        data: {
+          current_balance: number;
+          total_used: number;
+          quota_reset_date: string | null;
+          recent_transactions: any[];
+        };
+      }>(API_ENDPOINTS.billing.balance);
+      
+      set({ transactions: response.data.data.recent_transactions || [] });
     } catch (error) {
       console.error('Failed to fetch transactions:', error);
     }

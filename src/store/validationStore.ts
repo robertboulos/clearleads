@@ -28,9 +28,21 @@ export const useValidationStore = create<ValidationStore>((set, get) => ({
   validateSingle: async (data: { email?: string; phone?: string }) => {
     set({ isLoading: true });
     try {
+      // Get user's API key from localStorage or auth store
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('No authentication token found');
+      }
+      
+      // Add API key to validation request
+      const validationData = {
+        ...data,
+        api_key: 'from_token' // Backend will extract from Bearer token
+      };
+      
       const response = await apiClient.post<ValidationResult>(
         API_ENDPOINTS.validation.single,
-        data
+        validationData
       );
       const result = response.data;
       
@@ -50,12 +62,16 @@ export const useValidationStore = create<ValidationStore>((set, get) => ({
   fetchHistory: async (page = 1, limit = 20) => {
     set({ isLoading: true });
     try {
-      const response = await apiClient.paginated<ValidationResult>(
-        API_ENDPOINTS.validation.history,
-        { page, limit }
-      );
+      const response = await apiClient.get<{
+        success: boolean;
+        data: {
+          validations: ValidationResult[];
+          total: number;
+        };
+      }>(API_ENDPOINTS.validation.history, { page, limit });
+      
       set({ 
-        history: response.data,
+        history: response.data.data.validations,
         isLoading: false 
       });
     } catch (error) {

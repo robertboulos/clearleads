@@ -35,8 +35,11 @@ export interface XanoUserResponse {
   company?: string;
   lead_quota_remaining: number;
   leads_used: number;
-  created_at: string;
+  created_at: number;
   API_Key: string;
+  plan_id: number;
+  status: string;
+  stripe_customer_id: string;
 }
 
 export interface AuthResponse {
@@ -66,14 +69,21 @@ export const authService = {
     // Use auth/verify instead of auth/me since auth/me has 403 issues
     const userResponse = await apiClient.get<XanoUserResponse>(API_ENDPOINTS.auth.verify);
     
+    // Map plan_id to plan name
+    const planMap: Record<number, 'starter' | 'pro' | 'enterprise'> = {
+      0: 'starter',
+      1: 'pro', 
+      2: 'enterprise'
+    };
+    
     const user: User = {
       id: userResponse.data.id.toString(),
       email: userResponse.data.email,
       name: userResponse.data.name,
-      plan: 'starter', // Default plan, should be determined by backend
+      plan: planMap[userResponse.data.plan_id] || 'starter',
       credits: userResponse.data.lead_quota_remaining,
       apiKey: userResponse.data.API_Key,
-      createdAt: userResponse.data.created_at,
+      createdAt: new Date(userResponse.data.created_at).toISOString(),
       emailVerified: true
     };
     
@@ -107,14 +117,21 @@ export const authService = {
     // Use auth/verify instead of auth/me since auth/me has 403 issues
     const response = await apiClient.get<XanoUserResponse>(API_ENDPOINTS.auth.verify);
     
+    // Map plan_id to plan name
+    const planMap: Record<number, 'starter' | 'pro' | 'enterprise'> = {
+      0: 'starter',
+      1: 'pro', 
+      2: 'enterprise'
+    };
+    
     const user: User = {
       id: response.data.id.toString(),
       email: response.data.email,
       name: response.data.name,
-      plan: 'starter', // Should be determined by backend
+      plan: planMap[response.data.plan_id] || 'starter',
       credits: response.data.lead_quota_remaining,
       apiKey: response.data.API_Key,
-      createdAt: response.data.created_at,
+      createdAt: new Date(response.data.created_at).toISOString(),
       emailVerified: true
     };
     

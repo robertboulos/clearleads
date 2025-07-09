@@ -25,15 +25,22 @@ export const Dashboard: React.FC = () => {
     fetchStats();
   }, []);
 
-  const mockChartData = [
-    { name: 'Mon', validations: 12, success: 10 },
-    { name: 'Tue', validations: 19, success: 16 },
-    { name: 'Wed', validations: 15, success: 14 },
-    { name: 'Thu', validations: 25, success: 22 },
-    { name: 'Fri', validations: 22, success: 20 },
-    { name: 'Sat', validations: 18, success: 16 },
-    { name: 'Sun', validations: 8, success: 7 },
-  ];
+  // Use real data from stats if available, otherwise fallback to mock data
+  const chartData = stats?.dailyUsage?.length ? 
+    stats.dailyUsage.map(day => ({
+      name: new Date(day.date).toLocaleDateString('en', { weekday: 'short' }),
+      validations: day.count,
+      success: Math.floor(day.count * (stats.successRate || 0.8)) // Estimate success count
+    })) :
+    [
+      { name: 'Mon', validations: 12, success: 10 },
+      { name: 'Tue', validations: 19, success: 16 },
+      { name: 'Wed', validations: 15, success: 14 },
+      { name: 'Thu', validations: 25, success: 22 },
+      { name: 'Fri', validations: 22, success: 20 },
+      { name: 'Sat', validations: 18, success: 16 },
+      { name: 'Sun', validations: 8, success: 7 },
+    ];
 
   const statCards = [
     {
@@ -136,7 +143,7 @@ export const Dashboard: React.FC = () => {
               </select>
             </div>
             <Chart
-              data={mockChartData}
+              data={chartData}
               type="line"
               dataKey="validations"
               height={300}
@@ -153,7 +160,7 @@ export const Dashboard: React.FC = () => {
               </select>
             </div>
             <Chart
-              data={mockChartData}
+              data={chartData}
               type="bar"
               dataKey="success"
               height={300}
