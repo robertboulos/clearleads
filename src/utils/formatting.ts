@@ -1,15 +1,27 @@
 import { format, formatDistanceToNow } from 'date-fns';
 
 export const formatDate = (date: string | Date) => {
-  return format(new Date(date), 'MMM d, yyyy');
+  const dateObj = new Date(date);
+  if (isNaN(dateObj.getTime())) {
+    return 'N/A';
+  }
+  return format(dateObj, 'MMM d, yyyy');
 };
 
 export const formatDateTime = (date: string | Date) => {
-  return format(new Date(date), 'MMM d, yyyy h:mm a');
+  const dateObj = new Date(date);
+  if (isNaN(dateObj.getTime())) {
+    return 'N/A';
+  }
+  return format(dateObj, 'MMM d, yyyy h:mm a');
 };
 
 export const formatRelativeTime = (date: string | Date) => {
-  return formatDistanceToNow(new Date(date), { addSuffix: true });
+  const dateObj = new Date(date);
+  if (isNaN(dateObj.getTime())) {
+    return 'N/A';
+  }
+  return formatDistanceToNow(dateObj, { addSuffix: true });
 };
 
 export const formatCurrency = (amount: number) => {
