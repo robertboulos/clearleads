@@ -41,6 +41,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSubmit, isLoading 
   console.log('Register form errors:', errors);
 
   return (
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       {/* Google Sign Up Button */}
       <button
         type="button"
