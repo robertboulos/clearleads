@@ -318,27 +318,61 @@ export const Validate: React.FC = () => {
                         {selectedResult.details.domain && (
                           <div className="flex justify-between">
                             <span className="text-gray-600">Domain:</span>
-                            <span className="font-medium">{selectedResult.details.domain}</span>
+                            <span className="font-medium">
+                              {typeof selectedResult.details.domain === 'object' 
+                                ? JSON.stringify(selectedResult.details.domain) 
+                                : selectedResult.details.domain}
+                            </span>
                           </div>
                         )}
                         {selectedResult.details.provider && (
                           <div className="flex justify-between">
                             <span className="text-gray-600">Provider:</span>
-                            <span className="font-medium">{selectedResult.details.provider}</span>
+                            <span className="font-medium">
+                              {typeof selectedResult.details.provider === 'object' 
+                                ? JSON.stringify(selectedResult.details.provider) 
+                                : selectedResult.details.provider}
+                            </span>
                           </div>
                         )}
                         {selectedResult.details.carrier && (
                           <div className="flex justify-between">
                             <span className="text-gray-600">Carrier:</span>
-                            <span className="font-medium">{selectedResult.details.carrier}</span>
+                            <span className="font-medium">
+                              {typeof selectedResult.details.carrier === 'object' 
+                                ? JSON.stringify(selectedResult.details.carrier) 
+                                : selectedResult.details.carrier}
+                            </span>
                           </div>
                         )}
                         {selectedResult.details.country && (
                           <div className="flex justify-between">
                             <span className="text-gray-600">Country:</span>
-                            <span className="font-medium">{selectedResult.details.country}</span>
+                            <span className="font-medium">
+                              {typeof selectedResult.details.country === 'object' 
+                                ? JSON.stringify(selectedResult.details.country) 
+                                : selectedResult.details.country}
+                            </span>
                           </div>
                         )}
+                        {/* Handle any other detail fields that might be objects */}
+                        {Object.entries(selectedResult.details).map(([key, value]) => {
+                          // Skip already rendered fields
+                          if (['domain', 'provider', 'carrier', 'country'].includes(key)) {
+                            return null;
+                          }
+                          
+                          return (
+                            <div key={key} className="flex justify-between">
+                              <span className="text-gray-600 capitalize">{key.replace(/([A-Z])/g, ' $1')}:</span>
+                              <span className="font-medium">
+                                {typeof value === 'object' && value !== null
+                                  ? JSON.stringify(value)
+                                  : String(value || 'N/A')}
+                              </span>
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
                   )}
