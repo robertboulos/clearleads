@@ -1,0 +1,84 @@
+import { create } from 'zustand';
+import { ValidationResult, BatchValidation } from '../types/api';
+import { ValidationStats } from '../types/validation';
+import { apiClient } from '../services/api';
+import { API_ENDPOINTS } from '../utils/constants';
+
+interface ValidationStore {
+  results: ValidationResult[];
+  history: ValidationResult[];
+  batchValidations: BatchValidation[];
+  stats: ValidationStats | null;
+  isLoading: boolean;
+  validateSingle: (data: { email?: string; phone?: string }) => Promise<ValidationResult>;
+  fetchHistory: (page?: number, limit?: number) => Promise<void>;
+  fetchStats: () => Promise<void>;
+  addResult: (result: ValidationResult) => void;
+  clearResults: () => void;
+}
+
+export const useValidationStore = create<ValidationStore>((set, get) => ({
+  results: [],
+  history: [],
+  batchValidations: [],
+  stats: null,
+  isLoading: false,
+
+  validateSingle: async (data: { email?: string; phone?: string }) => {
+    set({ isLoading: true });
+    try {
+      const response = await apiClient.post<ValidationResult>(
+        API_ENDPOINTS.validation.single,
+        data
+      );
+      const result = response.data;
+      
+      // Add to results
+      set(state => ({
+        results: [result, ...state.results],
+        isLoading: false
+      }));
+      
+      return result;
+    } catch (error) {
+      set({ isLoading: false });
+      throw error;
+    }
+  },
+
+  fetchHistory: async (page = 1, limit = 20) => {
+    set({ isLoading: true });
+    try {
+      const response = await apiClient.paginated<ValidationResult>(
+        API_ENDPOINTS.validation.history,
+        { page, limit }
+      );
+      set({ 
+        history: response.data,
+        isLoading: false 
+      });
+    } catch (error) {
+      set({ isLoading: false });
+      console.error('Failed to fetch history:', error);
+    }
+  },
+
+  fetchStats: async () => {
+    try {
+      const response = await apiClient.get<ValidationStats>('/validations/stats');
+      set({ stats: response.data });
+    } catch (error) {
+      console.error('Failed to fetch stats:', error);
+    }
+  },
+
+  addResult: (result: ValidationResult) => {
+    set(state => ({
+      results: [result, ...state.results]
+    }));
+  },
+
+  clearResults: () => {
+    set({ results: [] });
+  },
+}));
