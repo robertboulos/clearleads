@@ -49,7 +49,9 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(({
         )}
       </div>
       {error && (
-        <p className="text-sm text-red-600">{error}</p>
+        <p className="text-sm text-red-600">
+          {typeof error === 'string' ? error : 'Invalid input'}
+        </p>
       )}
       {helperText && !error && (
         <p className="text-sm text-gray-500">{helperText}</p>
