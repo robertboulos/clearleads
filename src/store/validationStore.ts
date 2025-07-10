@@ -117,16 +117,34 @@ export const useValidationStore = create<ValidationStore>((set, get) => ({
   fetchHistory: async (page = 1, limit = 20) => {
     set({ isLoading: true });
     try {
+      // Real API structure from integration tests
       const response = await apiClient.get<{
         success: boolean;
         data: {
-          validations: ValidationResult[];
-          total: number;
+          validations: {
+            id: number;
+            created_at: number;
+            user_id: number;
+            validation_status: 'valid' | 'invalid';
+          }[];
+          total?: number;
         };
       }>(API_ENDPOINTS.validation.history, { page, limit });
       
+      // Transform real structure to expected ValidationResult format
+      const transformedHistory: ValidationResult[] = response.data.data.validations.map(item => ({
+        id: item.id.toString(),
+        email: '', // Not provided in history
+        phone: '', // Not provided in history
+        status: item.validation_status,
+        confidence: item.validation_status === 'valid' ? 100 : 0,
+        creditsUsed: 1, // Not provided, assuming 1
+        details: {},
+        createdAt: new Date(item.created_at).toISOString()
+      }));
+      
       set({ 
-        history: response.data.data.validations,
+        history: transformedHistory,
         isLoading: false 
       });
     } catch (error) {
