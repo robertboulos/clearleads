@@ -5,6 +5,7 @@ import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { User, Key, Bell, Shield, Copy, RefreshCw } from 'lucide-react';
 import { generateApiKey } from '../utils/formatting';
+import { authService } from '../services/auth';
 import toast from 'react-hot-toast';
 
 export const Settings: React.FC = () => {
@@ -29,11 +30,16 @@ export const Settings: React.FC = () => {
     toast.success('API key copied to clipboard');
   };
 
-  const handleRegenerateApiKey = () => {
-    const newApiKey = generateApiKey();
-    setApiKey(newApiKey);
-    updateUser({ apiKey: newApiKey });
-    toast.success('API key regenerated');
+  const handleRegenerateApiKey = async () => {
+    try {
+      const response = await authService.regenerateApiKey();
+      setApiKey(response);
+      updateUser({ apiKey: response });
+      toast.success('API key regenerated successfully');
+    } catch (error) {
+      toast.error('Failed to regenerate API key');
+      console.error('API key regeneration error:', error);
+    }
   };
 
   const renderProfileSettings = () => (
