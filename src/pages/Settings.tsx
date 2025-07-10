@@ -67,7 +67,7 @@ export const Settings: React.FC = () => {
       <div>
         <h3 className="text-lg font-semibold mb-4">Profile Information</h3>
         <form onSubmit={handleProfileUpdate} className="space-y-4">
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input
               label="Full Name"
               type="text"
@@ -84,7 +84,7 @@ export const Settings: React.FC = () => {
             />
           </div>
           
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input
               label="Company"
               type="text"
@@ -111,7 +111,7 @@ export const Settings: React.FC = () => {
             />
           </div>
           
-          <div className="grid md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             <Input
               label="City"
               type="text"
@@ -150,11 +150,11 @@ export const Settings: React.FC = () => {
               Avatar
             </label>
             <div className="flex items-center space-x-4">
-              <div className="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gray-300 rounded-full flex items-center justify-center">
                 {user?.avatar ? (
-                  <img src={user.avatar} alt={user.name} className="w-16 h-16 rounded-full" />
+                  <img src={user.avatar} alt={user.name} className="w-12 h-12 sm:w-16 sm:h-16 rounded-full" />
                 ) : (
-                  <User className="w-6 h-6 text-gray-500" />
+                  <User className="w-5 h-5 sm:w-6 sm:h-6 text-gray-500" />
                 )}
               </div>
               <Button variant="outline" size="sm">
@@ -176,8 +176,8 @@ export const Settings: React.FC = () => {
       <div>
         <h3 className="text-lg font-semibold mb-4">API Keys</h3>
         <div className="bg-gray-50 p-4 rounded-lg">
-          <div className="flex items-center justify-between mb-2">
-            <label className="text-sm font-medium text-gray-700">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2">
+            <label className="text-sm font-medium text-gray-700 mb-2 sm:mb-0">
               Your API Key
             </label>
             <div className="flex space-x-2">
@@ -187,7 +187,7 @@ export const Settings: React.FC = () => {
                 onClick={handleCopyApiKey}
                 icon={<Copy className="w-4 h-4" />}
               >
-                Copy
+                <span className="hidden sm:inline">Copy</span>
               </Button>
               <Button
                 variant="outline"
@@ -195,11 +195,11 @@ export const Settings: React.FC = () => {
                 onClick={handleRegenerateApiKey}
                 icon={<RefreshCw className="w-4 h-4" />}
               >
-                Regenerate
+                <span className="hidden sm:inline">Regenerate</span>
               </Button>
             </div>
           </div>
-          <div className="font-mono text-sm bg-white p-3 rounded border">
+          <div className="font-mono text-xs sm:text-sm bg-white p-3 rounded border break-all">
             {apiKey}
           </div>
         </div>
@@ -226,8 +226,8 @@ export const Settings: React.FC = () => {
             { id: 'validations', label: 'Validation updates', description: 'Updates about batch processing status' },
             { id: 'marketing', label: 'Marketing emails', description: 'Product updates and feature announcements' },
           ].map((setting) => (
-            <div key={setting.id} className="flex items-center justify-between py-3 border-b border-gray-100">
-              <div>
+            <div key={setting.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-3 border-b border-gray-100">
+              <div className="mb-2 sm:mb-0">
                 <p className="font-medium text-gray-900">{setting.label}</p>
                 <p className="text-sm text-gray-600">{setting.description}</p>
               </div>
@@ -300,15 +300,31 @@ export const Settings: React.FC = () => {
   return (
     <DashboardLayout>
       <div className="space-y-6">
-        <h1 className="text-2xl font-bold text-gray-900">Settings</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Settings</h1>
         
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
-          <div className="flex border-b border-gray-200">
+          {/* Mobile Tab Selector */}
+          <div className="sm:hidden border-b border-gray-200">
+            <select
+              value={activeTab}
+              onChange={(e) => setActiveTab(e.target.value)}
+              className="w-full p-4 text-sm font-medium bg-white border-none focus:outline-none"
+            >
+              {tabs.map((tab) => (
+                <option key={tab.id} value={tab.id}>
+                  {tab.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Desktop Tabs */}
+          <div className="hidden sm:flex border-b border-gray-200 overflow-x-auto">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center px-6 py-4 text-sm font-medium ${
+                className={`flex items-center px-4 sm:px-6 py-4 text-sm font-medium whitespace-nowrap ${
                   activeTab === tab.id
                     ? 'text-blue-600 border-b-2 border-blue-600'
                     : 'text-gray-600 hover:text-gray-900'
@@ -320,7 +336,7 @@ export const Settings: React.FC = () => {
             ))}
           </div>
           
-          <div className="p-6">
+          <div className="p-4 sm:p-6">
             {renderTabContent()}
           </div>
         </div>

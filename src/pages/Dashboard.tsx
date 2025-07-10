@@ -83,21 +83,21 @@ export const Dashboard: React.FC = () => {
 
   return (
     <DashboardLayout>
-      <div className="space-y-8">
+      <div className="space-y-6 sm:space-y-8">
         {/* Welcome Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-8 text-white">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold mb-2">
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-xl sm:rounded-2xl p-6 sm:p-8 text-white">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+            <div className="mb-4 sm:mb-0">
+              <h1 className="text-2xl sm:text-3xl font-bold mb-2">
                 Welcome back, {user?.name}!
               </h1>
-              <p className="text-blue-100 text-lg">
+              <p className="text-blue-100 text-base sm:text-lg">
                 Here's your validation activity overview
               </p>
             </div>
-            <div className="hidden md:block">
+            <div className="sm:block">
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-                <div className="text-2xl font-bold">{balance}</div>
+                <div className="text-xl sm:text-2xl font-bold">{balance}</div>
                 <div className="text-blue-100 text-sm">Credits Available</div>
               </div>
             </div>
@@ -105,37 +105,37 @@ export const Dashboard: React.FC = () => {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {statCards.map((stat, index) => (
-            <div key={index} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
+            <div key={index} className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6 hover:shadow-md transition-shadow">
               <div className="flex items-center justify-between mb-4">
-                <div className={`p-3 rounded-xl ${stat.bgColor}`}>
-                  <stat.icon className={`w-6 h-6 ${stat.color}`} />
+                <div className={`p-2 sm:p-3 rounded-xl ${stat.bgColor}`}>
+                  <stat.icon className={`w-5 h-5 sm:w-6 sm:h-6 ${stat.color}`} />
                 </div>
-                <div className={`flex items-center text-sm font-medium ${
+                <div className={`flex items-center text-xs sm:text-sm font-medium ${
                   stat.changeType === 'positive' ? 'text-green-600' : 'text-red-600'
                 }`}>
                   {stat.changeType === 'positive' ? (
-                    <ArrowUpRight className="w-4 h-4 mr-1" />
+                    <ArrowUpRight className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
                   ) : (
-                    <ArrowDownRight className="w-4 h-4 mr-1" />
+                    <ArrowDownRight className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
                   )}
                   {stat.change}
                 </div>
               </div>
               <div>
-                <div className="text-2xl font-bold text-gray-900 mb-1">{stat.value}</div>
-                <div className="text-gray-600 text-sm">{stat.title}</div>
+                <div className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">{stat.value}</div>
+                <div className="text-gray-600 text-xs sm:text-sm">{stat.title}</div>
               </div>
             </div>
           ))}
         </div>
 
         {/* Charts Section */}
-        <div className="grid lg:grid-cols-2 gap-8">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-semibold text-gray-900">Validation Trends</h3>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2 sm:mb-0">Validation Trends</h3>
               <select className="text-sm border border-gray-200 rounded-lg px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option>Last 7 days</option>
                 <option>Last 30 days</option>
@@ -146,13 +146,13 @@ export const Dashboard: React.FC = () => {
               data={chartData}
               type="line"
               dataKey="validations"
-              height={300}
+              height={250}
             />
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-semibold text-gray-900">Success Rate</h3>
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2 sm:mb-0">Success Rate</h3>
               <select className="text-sm border border-gray-200 rounded-lg px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option>Last 7 days</option>
                 <option>Last 30 days</option>
@@ -163,18 +163,18 @@ export const Dashboard: React.FC = () => {
               data={chartData}
               type="bar"
               dataKey="success"
-              height={300}
+              height={250}
               color="#10b981"
             />
           </div>
         </div>
 
         {/* Recent Activity & Quick Actions */}
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
           {/* Recent Activity */}
-          <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-6">Recent Activity</h3>
-            <div className="space-y-4">
+          <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4 sm:mb-6">Recent Activity</h3>
+            <div className="space-y-3 sm:space-y-4">
               {[
                 { 
                   action: 'Email Validated', 
@@ -205,19 +205,19 @@ export const Dashboard: React.FC = () => {
                   statusColor: 'bg-purple-100 text-purple-800'
                 }
               ].map((activity, index) => (
-                <div key={index} className="flex items-center justify-between py-3 border-b border-gray-100 last:border-b-0">
-                  <div className="flex items-center space-x-4">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                    <div>
-                      <p className="font-medium text-gray-900">{activity.action}</p>
-                      <p className="text-sm text-gray-600">{activity.details}</p>
+                <div key={index} className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-3 border-b border-gray-100 last:border-b-0">
+                  <div className="flex items-center space-x-3 sm:space-x-4 mb-2 sm:mb-0">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0"></div>
+                    <div className="min-w-0">
+                      <p className="font-medium text-gray-900 text-sm sm:text-base">{activity.action}</p>
+                      <p className="text-xs sm:text-sm text-gray-600 truncate">{activity.details}</p>
                     </div>
                   </div>
-                  <div className="text-right">
+                  <div className="flex items-center justify-between sm:flex-col sm:items-end ml-5 sm:ml-0">
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${activity.statusColor}`}>
                       {activity.status}
                     </span>
-                    <div className="text-sm text-gray-500 mt-1">
+                    <div className="text-xs sm:text-sm text-gray-500 sm:mt-1">
                       {activity.time}
                     </div>
                   </div>
@@ -227,41 +227,41 @@ export const Dashboard: React.FC = () => {
           </div>
 
           {/* Quick Actions */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-6">Quick Actions</h3>
-            <div className="space-y-4">
-              <button className="w-full p-4 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors text-left">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4 sm:mb-6">Quick Actions</h3>
+            <div className="space-y-3 sm:space-y-4">
+              <button className="w-full p-3 sm:p-4 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors text-left">
                 <div className="flex items-center space-x-3">
-                  <div className="p-2 bg-blue-100 rounded-lg">
-                    <CheckCircle className="w-5 h-5 text-blue-600" />
+                  <div className="p-2 bg-blue-100 rounded-lg flex-shrink-0">
+                    <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
                   </div>
-                  <div>
-                    <p className="font-medium text-gray-900">Validate Single Lead</p>
-                    <p className="text-sm text-gray-600">Quick validation</p>
+                  <div className="min-w-0">
+                    <p className="font-medium text-gray-900 text-sm sm:text-base">Validate Single Lead</p>
+                    <p className="text-xs sm:text-sm text-gray-600">Quick validation</p>
                   </div>
                 </div>
               </button>
               
-              <button className="w-full p-4 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors text-left">
+              <button className="w-full p-3 sm:p-4 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors text-left">
                 <div className="flex items-center space-x-3">
-                  <div className="p-2 bg-green-100 rounded-lg">
-                    <Users className="w-5 h-5 text-green-600" />
+                  <div className="p-2 bg-green-100 rounded-lg flex-shrink-0">
+                    <Users className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
                   </div>
-                  <div>
-                    <p className="font-medium text-gray-900">Batch Processing</p>
-                    <p className="text-sm text-gray-600">Upload CSV file</p>
+                  <div className="min-w-0">
+                    <p className="font-medium text-gray-900 text-sm sm:text-base">Batch Processing</p>
+                    <p className="text-xs sm:text-sm text-gray-600">Upload CSV file</p>
                   </div>
                 </div>
               </button>
               
-              <button className="w-full p-4 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors text-left">
+              <button className="w-full p-3 sm:p-4 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors text-left">
                 <div className="flex items-center space-x-3">
-                  <div className="p-2 bg-purple-100 rounded-lg">
-                    <CreditCard className="w-5 h-5 text-purple-600" />
+                  <div className="p-2 bg-purple-100 rounded-lg flex-shrink-0">
+                    <CreditCard className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600" />
                   </div>
-                  <div>
-                    <p className="font-medium text-gray-900">Buy Credits</p>
-                    <p className="text-sm text-gray-600">Add more credits</p>
+                  <div className="min-w-0">
+                    <p className="font-medium text-gray-900 text-sm sm:text-base">Buy Credits</p>
+                    <p className="text-xs sm:text-sm text-gray-600">Add more credits</p>
                   </div>
                 </div>
               </button>

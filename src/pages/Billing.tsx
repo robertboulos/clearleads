@@ -41,45 +41,46 @@ export const Billing: React.FC = () => {
   return (
     <DashboardLayout>
       <div className="space-y-6">
-        <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-gray-900">Billing & Credits</h1>
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-0">Billing & Credits</h1>
           <Button onClick={handleBillingPortal} variant="outline">
             <ExternalLink className="w-4 h-4 mr-2" />
-            Billing Portal
+            <span className="hidden sm:inline">Billing Portal</span>
+            <span className="sm:hidden">Portal</span>
           </Button>
         </div>
 
         {/* Current Plan & Balance */}
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="bg-white p-6 rounded-lg shadow-md">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+          <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold">Current Plan</h3>
-              <div className="text-2xl font-bold text-blue-600">
+              <div className="text-xl sm:text-2xl font-bold text-blue-600">
                 {currentPlan?.name}
               </div>
             </div>
             <div className="space-y-2">
               <div className="flex justify-between">
-                <span className="text-gray-600">Monthly Price</span>
+                <span className="text-gray-600 text-sm sm:text-base">Monthly Price</span>
                 <span className="font-medium">{formatCurrency(currentPlan?.price || 0)}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600">Included Credits</span>
+                <span className="text-gray-600 text-sm sm:text-base">Included Credits</span>
                 <span className="font-medium">{currentPlan?.credits || 0}</span>
               </div>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow-md">
+          <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold">Credit Balance</h3>
-              <div className="text-2xl font-bold text-green-600">
+              <div className="text-xl sm:text-2xl font-bold text-green-600">
                 {balance}
               </div>
             </div>
             <div className="space-y-2">
               <div className="flex justify-between">
-                <span className="text-gray-600">Available Credits</span>
+                <span className="text-gray-600 text-sm sm:text-base">Available Credits</span>
                 <span className="font-medium">{balance}</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">
@@ -93,9 +94,9 @@ export const Billing: React.FC = () => {
         </div>
 
         {/* Upgrade Plans */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
+        <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md">
           <h3 className="text-lg font-semibold mb-4">Upgrade Your Plan</h3>
-          <div className="grid md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {PLANS.map((plan) => (
               <div
                 key={plan.id}
@@ -107,7 +108,7 @@ export const Billing: React.FC = () => {
               >
                 <div className="text-center mb-4">
                   <h4 className="font-semibold text-lg">{plan.name}</h4>
-                  <div className="text-2xl font-bold text-gray-900 mt-2">
+                  <div className="text-xl sm:text-2xl font-bold text-gray-900 mt-2">
                     {formatCurrency(plan.price)}
                     <span className="text-sm text-gray-600">/month</span>
                   </div>
@@ -135,12 +136,12 @@ export const Billing: React.FC = () => {
         </div>
 
         {/* Transaction History */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
+        <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md">
           <h3 className="text-lg font-semibold mb-4">Transaction History</h3>
           
           {transactions.length === 0 ? (
             <div className="text-center py-8 text-gray-500">
-              <Receipt className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+              <Receipt className="w-8 h-8 sm:w-12 sm:h-12 mx-auto mb-4 text-gray-300" />
               <p>No transactions yet</p>
             </div>
           ) : (
@@ -148,38 +149,38 @@ export const Billing: React.FC = () => {
               {transactions.map((transaction) => (
                 <div
                   key={transaction.id}
-                  className="flex items-center justify-between py-3 border-b border-gray-100 last:border-b-0"
+                  className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-3 border-b border-gray-100 last:border-b-0"
                 >
-                  <div className="flex items-center space-x-3">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                  <div className="flex items-center space-x-3 mb-2 sm:mb-0">
+                    <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center ${
                       transaction.type === 'purchase' ? 'bg-green-100' :
                       transaction.type === 'usage' ? 'bg-blue-100' : 'bg-yellow-100'
                     }`}>
                       {transaction.type === 'purchase' ? (
-                        <TrendingUp className="w-4 h-4 text-green-600" />
+                        <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4 text-green-600" />
                       ) : transaction.type === 'usage' ? (
-                        <CreditCard className="w-4 h-4 text-blue-600" />
+                        <CreditCard className="w-3 h-3 sm:w-4 sm:h-4 text-blue-600" />
                       ) : (
-                        <Receipt className="w-4 h-4 text-yellow-600" />
+                        <Receipt className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-600" />
                       )}
                     </div>
-                    <div>
-                      <p className="font-medium text-gray-900">
+                    <div className="min-w-0">
+                      <p className="font-medium text-gray-900 text-sm sm:text-base">
                         {transaction.description}
                       </p>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-xs sm:text-sm text-gray-500">
                         {formatDateTime(transaction.createdAt)}
                       </p>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className={`font-medium ${
+                  <div className="flex items-center justify-between sm:flex-col sm:items-end ml-9 sm:ml-0">
+                    <p className={`font-medium text-sm sm:text-base ${
                       transaction.type === 'purchase' ? 'text-green-600' :
                       transaction.type === 'usage' ? 'text-red-600' : 'text-yellow-600'
                     }`}>
                       {transaction.type === 'purchase' ? '+' : '-'}{transaction.amount}
                     </p>
-                    <p className="text-sm text-gray-500">credits</p>
+                    <p className="text-xs sm:text-sm text-gray-500">credits</p>
                   </div>
                 </div>
               ))}

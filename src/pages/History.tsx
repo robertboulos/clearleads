@@ -53,6 +53,7 @@ export const History: React.FC = () => {
     {
       key: 'confidence' as keyof ValidationResult,
       label: 'Confidence',
+      hideOnMobile: true,
       render: (value: number) => (
         <div className="flex items-center space-x-2">
           <div className="w-16 bg-gray-200 rounded-full h-2">
@@ -68,6 +69,7 @@ export const History: React.FC = () => {
     {
       key: 'creditsUsed' as keyof ValidationResult,
       label: 'Credits',
+      hideOnMobile: true,
       render: (value: number) => (
         <span className="text-sm text-gray-600">{value}</span>
       )
@@ -84,9 +86,9 @@ export const History: React.FC = () => {
   return (
     <DashboardLayout>
       <div className="space-y-6">
-        <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-gray-900">Validation History</h1>
-          <button className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-0">Validation History</h1>
+          <button className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 self-start sm:self-auto">
             <Download className="w-4 h-4" />
             <span>Export</span>
           </button>
@@ -134,30 +136,30 @@ export const History: React.FC = () => {
         </div>
 
         {/* Summary Stats */}
-        <div className="grid md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <div className="bg-white p-4 rounded-lg shadow-md">
-            <div className="text-2xl font-bold text-gray-900">
+            <div className="text-xl sm:text-2xl font-bold text-gray-900">
               {filteredHistory.length}
             </div>
             <div className="text-sm text-gray-600">Total Validations</div>
           </div>
           
           <div className="bg-white p-4 rounded-lg shadow-md">
-            <div className="text-2xl font-bold text-green-600">
+            <div className="text-xl sm:text-2xl font-bold text-green-600">
               {filteredHistory.filter(r => r.status === 'valid').length}
             </div>
             <div className="text-sm text-gray-600">Valid</div>
           </div>
           
           <div className="bg-white p-4 rounded-lg shadow-md">
-            <div className="text-2xl font-bold text-red-600">
+            <div className="text-xl sm:text-2xl font-bold text-red-600">
               {filteredHistory.filter(r => r.status === 'invalid').length}
             </div>
             <div className="text-sm text-gray-600">Invalid</div>
           </div>
           
           <div className="bg-white p-4 rounded-lg shadow-md">
-            <div className="text-2xl font-bold text-yellow-600">
+            <div className="text-xl sm:text-2xl font-bold text-yellow-600">
               {filteredHistory.filter(r => r.status === 'risky').length}
             </div>
             <div className="text-sm text-gray-600">Risky</div>

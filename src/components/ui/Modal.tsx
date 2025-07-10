@@ -7,7 +7,7 @@ interface ModalProps {
   onClose: () => void;
   title?: string;
   children: React.ReactNode;
-  size?: 'sm' | 'md' | 'lg' | 'xl';
+  size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
   showCloseButton?: boolean;
 }
 
@@ -25,7 +25,8 @@ export const Modal: React.FC<ModalProps> = ({
     sm: 'max-w-md',
     md: 'max-w-lg',
     lg: 'max-w-2xl',
-    xl: 'max-w-4xl'
+    xl: 'max-w-4xl',
+    full: 'max-w-full mx-4'
   };
 
   return (
@@ -40,16 +41,17 @@ export const Modal: React.FC<ModalProps> = ({
         
         <div className={clsx(
           'inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:w-full',
-          sizes[size]
+          sizes[size],
+          size === 'full' && 'h-full sm:h-auto sm:max-h-[90vh]'
         )}>
           {title && (
-            <div className="px-6 py-4 border-b border-gray-200">
+            <div className="px-4 py-3 sm:px-6 sm:py-4 border-b border-gray-200">
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-medium text-gray-900">{title}</h3>
                 {showCloseButton && (
                   <button
                     onClick={onClose}
-                    className="text-gray-400 hover:text-gray-500"
+                    className="text-gray-400 hover:text-gray-500 p-1"
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -58,7 +60,10 @@ export const Modal: React.FC<ModalProps> = ({
             </div>
           )}
           
-          <div className="px-6 py-4">
+          <div className={clsx(
+            'px-4 py-4 sm:px-6',
+            size === 'full' && 'overflow-y-auto max-h-[calc(100vh-8rem)] sm:max-h-[calc(90vh-8rem)]'
+          )}>
             {children}
           </div>
         </div>
