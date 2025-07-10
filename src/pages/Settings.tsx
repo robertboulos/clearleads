@@ -20,9 +20,22 @@ export const Settings: React.FC = () => {
     { id: 'security', label: 'Security', icon: Shield },
   ];
 
-  const handleProfileUpdate = (e: React.FormEvent) => {
+  const handleProfileUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success('Profile updated successfully');
+    const formData = new FormData(e.target as HTMLFormElement);
+    
+    try {
+      const updatedUser = await authService.updateProfile({
+        name: formData.get('name') as string,
+        email: formData.get('email') as string,
+      });
+      
+      updateUser(updatedUser);
+      toast.success('Profile updated successfully');
+    } catch (error) {
+      toast.error('Failed to update profile');
+      console.error('Profile update error:', error);
+    }
   };
 
   const handleCopyApiKey = () => {
@@ -51,12 +64,14 @@ export const Settings: React.FC = () => {
             <Input
               label="Full Name"
               type="text"
+              name="name"
               defaultValue={user?.name}
               placeholder="Enter your full name"
             />
             <Input
               label="Email Address"
               type="email"
+              name="email"
               defaultValue={user?.email}
               placeholder="Enter your email"
             />

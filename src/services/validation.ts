@@ -124,20 +124,39 @@ export const validationService = {
     return response.data;
   },
 
-  async uploadCsv(file: File): Promise<BatchUploadResponse> {
-    const formData = new FormData();
-    formData.append('file', file);
+  async uploadCsv(file: File, batchName?: string): Promise<BatchUploadResponse> {
+    // Read file content as text
+    const csvContent = await file.text();
     
-    const response = await apiClient.post<BatchUploadResponse>(
-      API_ENDPOINTS.batch.uploadCsv,
-      formData,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      }
-    );
-    return response.data;
+    // Get API key from localStorage or auth store
+    const token = localStorage.getItem('token');
+    if (!token) {
+      throw new Error('User not authenticated');
+    }
+    
+    // Get user's API key
+    const verifyResponse = await apiClient.get('/api:Is1L6GFg/auth/verify');
+    const apiKey = verifyResponse.data.API_Key;
+    
+    const response = await apiClient.post<{
+      success: boolean;
+      batch_id: number;
+      csv_data_id: number;
+      message: string;
+      user: string;
+    }>(API_ENDPOINTS.batch.uploadCsv, {
+      csv_content: csvContent,
+      api_key: apiKey,
+      batch_name: batchName || `Batch Upload ${new Date().toISOString()}`
+    });
+    
+    // Transform to expected interface
+    return {
+      batch_id: response.data.batch_id.toString(),
+      file_name: batchName || file.name,
+      total_rows: csvContent.split('\n').length - 1, // Subtract header
+      preview: []
+    };
   },
 
   async processBatch(request: BatchProcessRequest): Promise<{ batch_id: string }> {

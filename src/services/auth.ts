@@ -139,19 +139,34 @@ export const authService = {
   },
 
   async updateProfile(data: Partial<RegisterData>): Promise<User> {
-    const response = await apiClient.patch<XanoUserResponse>(
-      API_ENDPOINTS.auth.updateProfile,
-      data
-    );
+    const response = await apiClient.patch<{
+      success: boolean;
+      message: string;
+      user: {
+        id: number;
+        name: string;
+        email: string;
+        company: string;
+        phone: string;
+        address: string;
+        city: string;
+        state: string;
+        zip: string;
+        country: string;
+      };
+    }>(API_ENDPOINTS.auth.updateProfile, data);
+    
+    // Get current user data to preserve plan and credits
+    const currentUser = await this.me();
     
     return {
-      id: response.data.id.toString(),
-      email: response.data.email,
-      name: response.data.name,
-      plan: 'starter',
-      credits: response.data.lead_quota_remaining,
-      apiKey: response.data.API_Key,
-      createdAt: response.data.created_at,
+      id: response.data.user.id.toString(),
+      email: response.data.user.email,
+      name: response.data.user.name,
+      plan: currentUser.plan,
+      credits: currentUser.credits,
+      apiKey: currentUser.apiKey,
+      createdAt: currentUser.createdAt,
       emailVerified: true
     };
   },

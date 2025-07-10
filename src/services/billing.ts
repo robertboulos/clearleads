@@ -18,7 +18,7 @@ export interface CreditTransaction {
 }
 
 export interface CheckoutSessionRequest {
-  package_type: 'starter' | 'professional' | 'enterprise';
+  package_type: 'starter' | 'pro' | 'enterprise';
 }
 
 export interface CheckoutSessionResponse {
