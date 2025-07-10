@@ -12,6 +12,12 @@ export interface RegisterData {
   email: string;
   password: string;
   company?: string;
+  phone?: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  zip?: string;
+  country?: string;
 }
 
 export interface XanoLoginResponse {
@@ -128,6 +134,13 @@ export const authService = {
       id: response.data.id.toString(),
       email: response.data.email,
       name: response.data.name,
+      company: response.data.company,
+      phone: response.data.phone,
+      address: response.data.address,
+      city: response.data.city,
+      state: response.data.state,
+      zip: response.data.zip,
+      country: response.data.country,
       plan: planMap[response.data.plan_id] || 'starter',
       credits: response.data.lead_quota_remaining,
       apiKey: response.data.API_Key,
@@ -146,13 +159,13 @@ export const authService = {
         id: number;
         name: string;
         email: string;
-        company: string;
-        phone: string;
-        address: string;
-        city: string;
-        state: string;
-        zip: string;
-        country: string;
+        company?: string;
+        phone?: string;
+        address?: string;
+        city?: string;
+        state?: string;
+        zip?: string;
+        country?: string;
       };
     }>(API_ENDPOINTS.auth.updateProfile, data);
     
@@ -163,6 +176,13 @@ export const authService = {
       id: response.data.user.id.toString(),
       email: response.data.user.email,
       name: response.data.user.name,
+      company: response.data.user.company,
+      phone: response.data.user.phone,
+      address: response.data.user.address,
+      city: response.data.user.city,
+      state: response.data.user.state,
+      zip: response.data.user.zip,
+      country: response.data.user.country,
       plan: currentUser.plan,
       credits: currentUser.credits,
       apiKey: currentUser.apiKey,

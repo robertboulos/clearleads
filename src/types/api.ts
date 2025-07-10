@@ -3,6 +3,13 @@ export interface User {
   email: string;
   name: string;
   avatar?: string;
+  company?: string;
+  phone?: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  zip?: string;
+  country?: string;
   plan: 'starter' | 'pro' | 'enterprise';
   credits: number;
   apiKey: string;

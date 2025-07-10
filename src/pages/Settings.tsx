@@ -28,6 +28,13 @@ export const Settings: React.FC = () => {
       const updatedUser = await authService.updateProfile({
         name: formData.get('name') as string,
         email: formData.get('email') as string,
+        company: formData.get('company') as string,
+        phone: formData.get('phone') as string,
+        address: formData.get('address') as string,
+        city: formData.get('city') as string,
+        state: formData.get('state') as string,
+        zip: formData.get('zip') as string,
+        country: formData.get('country') as string,
       });
       
       updateUser(updatedUser);
@@ -74,6 +81,67 @@ export const Settings: React.FC = () => {
               name="email"
               defaultValue={user?.email}
               placeholder="Enter your email"
+            />
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-4">
+            <Input
+              label="Company"
+              type="text"
+              name="company"
+              defaultValue={user?.company}
+              placeholder="Enter your company name"
+            />
+            <Input
+              label="Phone Number"
+              type="tel"
+              name="phone"
+              defaultValue={user?.phone}
+              placeholder="Enter your phone number"
+            />
+          </div>
+          
+          <div>
+            <Input
+              label="Address"
+              type="text"
+              name="address"
+              defaultValue={user?.address}
+              placeholder="Enter your street address"
+            />
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-4">
+            <Input
+              label="City"
+              type="text"
+              name="city"
+              defaultValue={user?.city}
+              placeholder="Enter your city"
+            />
+            <Input
+              label="State/Province"
+              type="text"
+              name="state"
+              defaultValue={user?.state}
+              placeholder="Enter your state"
+            />
+            <Input
+              label="ZIP/Postal Code"
+              type="text"
+              name="zip"
+              defaultValue={user?.zip}
+              placeholder="Enter your ZIP code"
+            />
+          </div>
+          
+          <div>
+            <Input
+              label="Country"
+              type="text"
+              name="country"
+              defaultValue={user?.country}
+              placeholder="Enter your country"
             />
           </div>
           
