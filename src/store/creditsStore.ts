@@ -21,6 +21,7 @@ export const useCreditsStore = create<CreditsStore>((set, get) => ({
   fetchBalance: async () => {
     set({ isLoading: true });
     try {
+      // Use the REAL credits balance endpoint that has transactions
       const response = await apiClient.get<{
         success: boolean;
         data: {
@@ -31,11 +32,14 @@ export const useCreditsStore = create<CreditsStore>((set, get) => ({
         };
       }>(API_ENDPOINTS.billing.balance);
       
+      // REAL structure confirmed by integration tests - the structure was correct!
       set({ 
         balance: response.data.data.current_balance,
         transactions: response.data.data.recent_transactions || [],
         isLoading: false 
       });
+      
+      console.log('✅ Credits balance updated:', response.data.data.current_balance);
     } catch (error) {
       set({ isLoading: false });
       console.error('Failed to fetch balance:', error);

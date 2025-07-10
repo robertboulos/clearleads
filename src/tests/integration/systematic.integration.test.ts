@@ -13,9 +13,9 @@ describe('Systematic Integration Tests - Fix All Data Structures', () => {
     console.log('🚀 SYSTEMATIC TESTING: Finding all real data structures...');
     
     try {
-      // Login with env vars or fallback
-      const testEmail = process.env.TEST_EMAIL || 'robertjboulos@gmail.com';
-      const testPassword = process.env.TEST_PASSWORD || 'TestPassword123!';
+      // Use exact same pattern as working auth test
+      const testEmail = 'robertjboulos@gmail.com';
+      const testPassword = 'robertjboulos@gmail.com';
       
       console.log('🔐 Attempting login with:', testEmail);
       console.log('🔒 Password provided:', testPassword ? 'YES' : 'NO');

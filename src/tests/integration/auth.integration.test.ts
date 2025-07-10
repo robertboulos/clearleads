@@ -8,7 +8,7 @@ describe('Auth Integration Tests', () => {
 
   beforeAll(async () => {
     const testEmail = process.env.TEST_EMAIL || 'robertjboulos@gmail.com';
-    const testPassword = process.env.TEST_PASSWORD || 'TestPassword123!';
+    const testPassword = process.env.TEST_PASSWORD || 'robertjboulos@gmail.com';
 
     console.log('🔐 Testing login with real credentials...');
     console.log('📧 Email:', testEmail);
@@ -17,7 +17,7 @@ describe('Auth Integration Tests', () => {
 
   it('should login with real credentials and get auth token', async () => {
     const testEmail = process.env.TEST_EMAIL || 'robertjboulos@gmail.com';
-    const testPassword = process.env.TEST_PASSWORD || 'TestPassword123!';
+    const testPassword = process.env.TEST_PASSWORD || 'robertjboulos@gmail.com';
 
     const response = await apiClient.post(API_ENDPOINTS.auth.login, {
       email: testEmail,

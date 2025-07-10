@@ -9,7 +9,7 @@ describe('Billing Integration Tests', () => {
   beforeAll(async () => {
     // Login first
     const testEmail = 'robertjboulos@gmail.com';
-    const testPassword = 'TestPassword123!';
+    const testPassword = 'robertjboulos@gmail.com';
 
     const loginResponse = await apiClient.post(API_ENDPOINTS.auth.login, {
       email: testEmail,
