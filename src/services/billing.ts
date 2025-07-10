@@ -65,33 +65,69 @@ export const billingService = {
   },
 
   async createCheckoutSession(request: CheckoutSessionRequest): Promise<CheckoutSessionResponse> {
-    const response = await apiClient.post<CheckoutSessionResponse>(
-      API_ENDPOINTS.billing.checkout,
-      request
-    );
-    return response.data;
+    try {
+      const response = await apiClient.post<CheckoutSessionResponse>(
+        API_ENDPOINTS.billing.checkout,
+        request
+      );
+      return response.data;
+    } catch (error: any) {
+      // Handle Stripe configuration errors gracefully
+      if (error.message?.includes('Failed to create checkout session') || 
+          error.response?.status === 500) {
+        throw new Error('Billing system is currently being set up. Please contact support or try again later.');
+      }
+      throw error;
+    }
   },
 
   async createSubscription(request: SubscriptionRequest): Promise<SubscriptionResponse> {
-    const response = await apiClient.post<SubscriptionResponse>(
-      API_ENDPOINTS.billing.subscriptions.create,
-      request
-    );
-    return response.data;
+    try {
+      const response = await apiClient.post<SubscriptionResponse>(
+        API_ENDPOINTS.billing.subscriptions.create,
+        request
+      );
+      return response.data;
+    } catch (error: any) {
+      // Handle Stripe configuration errors
+      if (error.response?.status === 500) {
+        throw new Error('Subscription system is currently being configured. Please contact support.');
+      }
+      throw error;
+    }
   },
 
   async getSubscriptionStatus(): Promise<SubscriptionStatus> {
-    const response = await apiClient.get<SubscriptionStatus>(
-      API_ENDPOINTS.billing.subscriptions.status
-    );
-    return response.data;
+    try {
+      const response = await apiClient.get<SubscriptionStatus>(
+        API_ENDPOINTS.billing.subscriptions.status
+      );
+      return response.data;
+    } catch (error: any) {
+      // Handle missing stripe_subscription_id gracefully
+      if (error.message?.includes('stripe_subscription_id')) {
+        return {
+          has_subscription: false,
+          status: 'inactive'
+        };
+      }
+      throw error;
+    }
   },
 
   async createBillingPortal(): Promise<BillingPortalResponse> {
-    const response = await apiClient.post<BillingPortalResponse>(
-      API_ENDPOINTS.billing.subscriptions.billingPortal
-    );
-    return response.data;
+    try {
+      const response = await apiClient.post<BillingPortalResponse>(
+        API_ENDPOINTS.billing.subscriptions.billingPortal
+      );
+      return response.data;
+    } catch (error: any) {
+      // Handle Stripe configuration errors
+      if (error.response?.status === 500) {
+        throw new Error('Billing portal is currently being set up. Please contact support.');
+      }
+      throw error;
+    }
   },
 
   // Redirect to Stripe Checkout
