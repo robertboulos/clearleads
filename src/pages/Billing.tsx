@@ -86,7 +86,7 @@ export const Billing: React.FC = () => {
               <div className="w-full bg-gray-200 rounded-full h-2">
                 <div
                   className="bg-green-600 h-2 rounded-full"
-                  style={{ width: `${(balance / (currentPlan?.credits || 1)) * 100}%` }}
+                  style={{ width: `${Math.min((balance / (currentPlan?.credits || 1)) * 100, 100)}%` }}
                 />
               </div>
             </div>
